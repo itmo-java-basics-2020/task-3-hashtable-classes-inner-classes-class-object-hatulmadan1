@@ -90,6 +90,9 @@ public class HashTableTest {
                     Object key = keysProvider.randomKey();
                     Object value = valuesSupplier.get();
 
+                    //System.out.println("System.out.println(h.put(" + key.toString() + "," + value.toString() + "));");
+                    //System.out.println("put");
+
                     Object expectedPrevValue = controlInstance.put(key, value);
                     Object actualPrevValue = testInstance.put(key, value);
 
@@ -99,6 +102,9 @@ public class HashTableTest {
                 }
                 case REMOVE: {
                     Object key = keysProvider.randomKey();
+
+                    //System.out.println("System.out.println(h.remove(" + key.toString() + "));");
+                    //System.out.println("remove");
 
                     Object expectedPrevValue = controlInstance.remove(key);
                     Object actualPrevValue = testInstance.remove(key);
