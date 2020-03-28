@@ -3,6 +3,34 @@ package ru.itmo.java;
 import java.util.Map;
 
 public class HashTable {
+    private final double loadFactor;
+    private int threshold, objectsInData;
+    private Entry[] data;
+
+    private static final double DEFAULT_LOAD_FACTOR = 0.5;
+    private static final int DEFAULT_SIZE = 101;
+
+    public HashTable() {
+        this(DEFAULT_SIZE, DEFAULT_LOAD_FACTOR);
+    }
+
+    public HashTable(int size) {
+        this(size, DEFAULT_LOAD_FACTOR);
+    }
+
+    public HashTable(double loadFactor) {
+        this(DEFAULT_SIZE, loadFactor);
+    }
+
+    public HashTable(int size, double loadFactor) {
+        data = new Entry[size];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = new Entry(null, null);
+        }
+        this.loadFactor = loadFactor;
+        this.threshold = (int)Math.ceil(this.loadFactor * this.data.length);
+        this.objectsInData = 0;
+    }
 
     public Object put(Object key, Object value) {
         if (key == null) {
@@ -39,7 +67,7 @@ public class HashTable {
 
     public Object get(Object key) {
         if (key == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         Integer indexInArray = keyToRealIndex(key);
@@ -119,39 +147,10 @@ public class HashTable {
         return index;
     }
 
-    private final double loadFactor;
-    private int threshold, objectsInData;
-    private Entry[] data;
-
-    private static final double DEFAULT_LOAD_FACTOR = 0.5;
-    private static final int DEFAULT_SIZE = 101;
-
-    public HashTable(int size, double loadFactor) {
-        data = new Entry[size];
-        for (int i = 0; i < data.length; i++) {
-            data[i] = new Entry(null, null);
-        }
-        this.loadFactor = loadFactor;
-        this.threshold = (int)Math.ceil(this.loadFactor * this.data.length);
-        this.objectsInData = 0;
-    }
-
-    public HashTable(int size) {
-        this(size, DEFAULT_LOAD_FACTOR);
-    }
-
-    public HashTable(double loadFactor) {
-        this(DEFAULT_SIZE, loadFactor);
-    }
-
-    public HashTable() {
-        this(DEFAULT_SIZE, DEFAULT_LOAD_FACTOR);
-    }
-
     private static class Entry {
-        Object key, value;
-        int hashCode;
-        boolean deleted;
+        private Object key, value;
+        private int hashCode;
+        private boolean deleted;
 
         public Entry(Object key, Object value) {
             this.key = key;
